@@ -69,6 +69,8 @@ __PACKAGE__->meta->make_immutable;
 1;
 # ABSTRACT: no line insertion and does Package version with our
 
+=for Pod::Coverage .+
+
 =head1 SYNOPSIS
 
 in dist.ini
