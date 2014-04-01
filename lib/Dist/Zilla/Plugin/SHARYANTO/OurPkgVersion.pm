@@ -92,3 +92,12 @@ This module is like L<Dist::Zilla::Plugin::OurPkgVersion> but can replace the
 previously generated C<our $VERSION = '0.123'; > bit. If the author of
 OurPkgVersion thinks this is a good idea, then perhaps this module will be
 merged with OurPkgVersion.
+
+
+=head1 SEE ALSO
+
+L<Dist::Zill::Plugin::OurPkgVersion>
+
+A simple script I'm using when testing: L<https://github.com/sharyanto/scripts/blob/master/fill-version-numbers-from-dist-ini>
+
+Another approach: L<Dist::Zill::Plugin::RewriteVersion> and L<Dist::Zill::Plugin:::BumpVersionAfterRelease>
