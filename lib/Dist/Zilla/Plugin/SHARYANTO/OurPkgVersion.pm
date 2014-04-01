@@ -1,6 +1,6 @@
 package Dist::Zilla::Plugin::SHARYANTO::OurPkgVersion;
 
-use 5.008;
+use 5.010;
 use strict;
 use warnings;
 
@@ -14,8 +14,6 @@ with (
 	},
 );
 
-use PPI;
-use MooseX::Types::Perl qw( LaxVersionStr );
 use namespace::autoclean;
 
 sub munge_files {
@@ -35,30 +33,15 @@ sub munge_file {
 
 	my $version = $self->zilla->version;
 
-	confess 'invalid characters in version'
-		unless LaxVersionStr->check( $version );
-
 	my $content = $file->content;
 
-	my $doc = PPI::Document->new(\$content)
-		or $self->log( 'Skipping: "'
-			. $file->name
-			.  '" error with PPI: '
-			. PPI::Document->errstr
-			)
-			;
-
-	return unless defined $doc;
-
-	my $comments = $doc->find('PPI::Token::Comment');
-
-	my $version_regex
-		= q{
+        my $munged_version = 0;
+        $content =~ s/
                   ^
                   (\s*)           # capture all whitespace before comment
 
+                  (?:our [ ] \$VERSION [ ] = [ ] 'v?[0-9_.]+'; [ ] )?  # previously produced output
                   (
-                    (?:our \s \$VERSION \s = \s 'v?[0-9_.]+'; )?  # previously produced output
                     \#\s*VERSION  # capture # VERSION
                     \b            # and ensure it ends on a word boundary
                     [             # conditionally
@@ -66,30 +49,13 @@ sub munge_file {
                       \s          # any whitespace including newlines see GH #5
                     ]*            # as many of the above as there are
                   )
-                  $               # until the EOL}
-		;
-
-	my $munged_version = 0;
-	if ( ref($comments) eq 'ARRAY' ) {
-		foreach ( @{ $comments } ) {
-			if ( /$version_regex/xms ) {
-				my ( $ws, $comment ) =  ( $1, $2 );
-				$comment =~ s/(?=\bVERSION\b)/TRIAL /x if $self->zilla->is_trial;
-				my $code
-						= "$ws"
-						. q{our $VERSION = '}
-						. $version
-						. qq{'; $comment}
-						;
-				$_->set_content("$code");
-				$file->content( $doc->serialize );
-				$munged_version++;
-			}
-		}
-	}
+                  $               # until the EOL}xm
+		/
+                    "${1}our \$VERSION = '$version'; $2"/emx and $munged_version++;
 
 	if ( $munged_version ) {
 		$self->log_debug([ 'adding $VERSION assignment to %s', $file->name ]);
+                $file->content($content);
 	}
 	else {
 		$self->log( 'Skipping: "'
