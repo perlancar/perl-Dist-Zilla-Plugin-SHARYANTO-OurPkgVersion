@@ -1,10 +1,11 @@
-package Dist::Zilla::Plugin::SHARYANTO::OurPkgVersion;
+package Dist::Zilla::Plugin::PERLANCAR::OurPkgVersion;
+
+# DATE
+# VERSION
 
 use 5.010;
 use strict;
 use warnings;
-
-# VERSION
 
 use Moose;
 with (
@@ -75,7 +76,7 @@ __PACKAGE__->meta->make_immutable;
 
 in dist.ini
 
-	[SHARYANTO::OurPkgVersion]
+	[PERLANCAR::OurPkgVersion]
 
 in your modules
 
@@ -97,7 +98,5 @@ merged with OurPkgVersion.
 =head1 SEE ALSO
 
 L<Dist::Zill::Plugin::OurPkgVersion>
-
-A simple script I'm using when testing: L<https://github.com/sharyanto/scripts/blob/master/fill-version-numbers-from-dist-ini>
 
 Another approach: L<Dist::Zill::Plugin::RewriteVersion> and L<Dist::Zill::Plugin:::BumpVersionAfterRelease>
