@@ -1,5 +1,3 @@
-Revision history for Dist-Zilla-PERLANCAR-OurPkgVersion
-
 0.04    2015-07-04 (PERLANCAR)
 
 	- Don't replace #VERSION below __DATA__ or __END__.
